@@ -1,0 +1,16 @@
+﻿part,qty,material,manufacturing,notes
+body_side_plate,2,PLA/Acrylic,3D print or laser cut,fixed pivots H0/H1/H2/T
+input_crank_H1_A,2,PLA/Aluminum,3D print/CNC,40 mm hole distance
+coupler_A_B,2,PLA/Aluminum,3D print/laser cut,120 mm hole distance
+thigh_rocker_H0_B,2,PLA/Acrylic,3D print/laser cut,100 mm hole distance
+shank_B_F,2,PLA/Acrylic,3D print/laser cut,140 mm hole distance
+rear_rocker_H2_F,2,PLA/Acrylic,3D print/laser cut,180 mm hole distance
+tail_rod,1,PLA/carbon rod,3D print/standard rod,180-220 mm adjustable
+tail_mass,1,steel nuts,standard part,0-30 g adjustable
+DC_gear_motor,1,standard,purchase,6-12V gear motor
+release_servo,1,standard,purchase,9g/20g servo
+elastic_tendon,2,rubber/spring,purchase,extension spring or rubber band
+M3_fasteners,many,steel,purchase,hinge joints
+spacers,many,brass/PLA,purchase/print,8-12 mm spacers
+controller,1,Arduino/ESP32,purchase,motor + servo control
+limit_switch,1,standard,purchase,preload detection

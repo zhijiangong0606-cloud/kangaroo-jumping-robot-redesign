@@ -1,0 +1,20 @@
+part,file,x_mm,y_mm,z_mm,notes
+left body side plate,BodySidePlate_verified.SLDPRT,0,-8,0,base side plate
+right body side plate,BodySidePlate_verified.SLDPRT,0,8,0,mirror/use same part
+left L1 crank,L1_Crank_40mm.SLDPRT,-80,-18,60,rotate to connect H1-A
+right L1 crank,L1_Crank_40mm.SLDPRT,-80,18,60,rotate to connect H1-A
+left L2 coupler,L2_Coupler_120mm.SLDPRT,-43,-18,46,rotate to connect A-B
+right L2 coupler,L2_Coupler_120mm.SLDPRT,-43,18,46,rotate to connect A-B
+left L3 thigh,L3_ThighRocker_100mm.SLDPRT,0,-18,0,rotate to connect H0-B
+right L3 thigh,L3_ThighRocker_100mm.SLDPRT,0,18,0,rotate to connect H0-B
+left L4 shank,L4_Shank_140mm.SLDPRT,45,-18,80,rotate to connect B-F
+right L4 shank,L4_Shank_140mm.SLDPRT,45,18,80,rotate to connect B-F
+left L5 rear rocker,L5_RearRocker_180mm.SLDPRT,120,-18,60,rotate to connect H2-F
+right L5 rear rocker,L5_RearRocker_180mm.SLDPRT,120,18,60,rotate to connect H2-F
+left foot,FootPad_85mm.SLDPRT,-58,-18,231,connect at F
+right foot,FootPad_85mm.SLDPRT,-58,18,231,connect at F
+tail rod,TailRod_210mm.SLDPRT,200,0,-20,tail hinge point T
+winding drum,WindingDrum_r18_w24.SLDPRT,-55,0,80,motor preload spool
+gear motor placeholder,GearMotor_Placeholder_60x32x26.SLDPRT,-25,0,90,body-mounted motor
+servo placeholder,Servo_Placeholder_38x35x22.SLDPRT,135,0,95,latch release servo
+latch placeholder,Latch_Placeholder_50x12x8.SLDPRT,80,0,72,latch module

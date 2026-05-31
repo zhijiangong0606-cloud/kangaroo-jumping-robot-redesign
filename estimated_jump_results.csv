@@ -1,0 +1,7 @@
+﻿preload_mm,elastic_energy_J,estimated_height_cm,estimated_range_cm,assumptions
+20,0.180,1.83,3.45,"m=0.45kg,k=900N/m,eta=45%,launch_angle=35deg"
+25,0.281,2.87,5.39,"m=0.45kg,k=900N/m,eta=45%,launch_angle=35deg"
+30,0.405,4.13,7.76,"m=0.45kg,k=900N/m,eta=45%,launch_angle=35deg"
+35,0.551,5.62,10.56,"m=0.45kg,k=900N/m,eta=45%,launch_angle=35deg"
+40,0.720,7.34,13.79,"m=0.45kg,k=900N/m,eta=45%,launch_angle=35deg"
+45,0.911,9.29,17.46,"m=0.45kg,k=900N/m,eta=45%,launch_angle=35deg"

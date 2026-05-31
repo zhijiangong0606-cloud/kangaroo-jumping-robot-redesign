@@ -1,0 +1,15 @@
+# SolidWorks temporary/lock files
+~$*
+*.bak
+*.tmp
+
+# Build outputs and local helper binaries
+*.exe
+*.dll
+*.pdb
+*.obj
+
+# Local caches
+__pycache__/
+.pytest_cache/
+

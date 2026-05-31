@@ -1,0 +1,170 @@
+solid latch
+  facet normal 0 0 1
+    outer loop
+      vertex 55 -4 66
+      vertex 105 -4 66
+      vertex 105 4 66
+    endloop
+  endfacet
+  facet normal 0 0 1
+    outer loop
+      vertex 55 -4 66
+      vertex 105 4 66
+      vertex 55 4 66
+    endloop
+  endfacet
+  facet normal 0 0 -1
+    outer loop
+      vertex 55 -4 78
+      vertex 55 4 78
+      vertex 105 4 78
+    endloop
+  endfacet
+  facet normal 0 0 -1
+    outer loop
+      vertex 55 -4 78
+      vertex 105 4 78
+      vertex 105 -4 78
+    endloop
+  endfacet
+  facet normal 0 1 0
+    outer loop
+      vertex 55 -4 66
+      vertex 55 -4 78
+      vertex 105 -4 78
+    endloop
+  endfacet
+  facet normal 0 1 0
+    outer loop
+      vertex 55 -4 66
+      vertex 105 -4 78
+      vertex 105 -4 66
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+      vertex 105 -4 66
+      vertex 105 -4 78
+      vertex 105 4 78
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+      vertex 105 -4 66
+      vertex 105 4 78
+      vertex 105 4 66
+    endloop
+  endfacet
+  facet normal 0 -1 0
+    outer loop
+      vertex 105 4 66
+      vertex 105 4 78
+      vertex 55 4 78
+    endloop
+  endfacet
+  facet normal 0 -1 0
+    outer loop
+      vertex 105 4 66
+      vertex 55 4 78
+      vertex 55 4 66
+    endloop
+  endfacet
+  facet normal 1 0 -0
+    outer loop
+      vertex 55 4 66
+      vertex 55 4 78
+      vertex 55 -4 78
+    endloop
+  endfacet
+  facet normal 1 0 0
+    outer loop
+      vertex 55 4 66
+      vertex 55 -4 78
+      vertex 55 -4 66
+    endloop
+  endfacet
+  facet normal 0 0 1
+    outer loop
+      vertex 97 -4 65.5
+      vertex 107 -4 65.5
+      vertex 107 4 65.5
+    endloop
+  endfacet
+  facet normal 0 0 1
+    outer loop
+      vertex 97 -4 65.5
+      vertex 107 4 65.5
+      vertex 97 4 65.5
+    endloop
+  endfacet
+  facet normal 0 0 -1
+    outer loop
+      vertex 97 -4 110.5
+      vertex 97 4 110.5
+      vertex 107 4 110.5
+    endloop
+  endfacet
+  facet normal 0 0 -1
+    outer loop
+      vertex 97 -4 110.5
+      vertex 107 4 110.5
+      vertex 107 -4 110.5
+    endloop
+  endfacet
+  facet normal 0 1 0
+    outer loop
+      vertex 97 -4 65.5
+      vertex 97 -4 110.5
+      vertex 107 -4 110.5
+    endloop
+  endfacet
+  facet normal 0 1 0
+    outer loop
+      vertex 97 -4 65.5
+      vertex 107 -4 110.5
+      vertex 107 -4 65.5
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+      vertex 107 -4 65.5
+      vertex 107 -4 110.5
+      vertex 107 4 110.5
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+      vertex 107 -4 65.5
+      vertex 107 4 110.5
+      vertex 107 4 65.5
+    endloop
+  endfacet
+  facet normal 0 -1 0
+    outer loop
+      vertex 107 4 65.5
+      vertex 107 4 110.5
+      vertex 97 4 110.5
+    endloop
+  endfacet
+  facet normal 0 -1 0
+    outer loop
+      vertex 107 4 65.5
+      vertex 97 4 110.5
+      vertex 97 4 65.5
+    endloop
+  endfacet
+  facet normal 1 0 -0
+    outer loop
+      vertex 97 4 65.5
+      vertex 97 4 110.5
+      vertex 97 -4 110.5
+    endloop
+  endfacet
+  facet normal 1 0 0
+    outer loop
+      vertex 97 4 65.5
+      vertex 97 -4 110.5
+      vertex 97 -4 65.5
+    endloop
+  endfacet
+endsolid latch
