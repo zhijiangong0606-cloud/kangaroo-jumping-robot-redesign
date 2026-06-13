@@ -13,3 +13,10 @@
 __pycache__/
 .pytest_cache/
 
+# Third-party reference (MIT, re-clonable): https://github.com/aarondls/overleap
+# Documented in the design report; not vendored to avoid an embedded git repo.
+external_references/
+
+# Large regenerable reference artifact (28 MB ASCII STL)
+solidworks_basic_model/overleap_reference_model/Overleap_reference_combined_ascii.stl
+

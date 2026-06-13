@@ -1,0 +1,17 @@
+part_file,instances,role,key_dim_mm,material,manufacturing,notes
+BodyPlate_3D.SLDPRT,2,frame side plate,hex ~265x130x4,3-4mm PLA/acrylic/carbon,3D print or laser cut,carries fixed pivots H0/H1/H2/T + module mount holes
+L1_Crank_40.SLDPRT,2,input crank H1-A,40 hole pitch,PLA/aluminum,3D print/CNC,driven member; defines stored-energy pose
+L2_Coupler_120.SLDPRT,2,coupler A-B,120 hole pitch,PLA/aluminum,3D print/laser cut,transfers crank motion into the chain
+L3_Thigh_100.SLDPRT,2,thigh rocker H0-B,100 hole pitch,PLA/acrylic,3D print/laser cut,main hip rocker
+L4_Shank_140.SLDPRT,2,shank B-F,140 hole pitch,PLA/acrylic,3D print/laser cut,knee-to-ankle link with lightening holes
+L5_Rocker_180.SLDPRT,2,rear rocker H2-F,180 hole pitch,PLA/acrylic,3D print/laser cut,closes the loop; longest link
+Foot_80.SLDPRT,2,foot/toe pad,80 reach,PLA + rubber pad,3D print + rubber,ground-contact end, forward-down reach
+TailRod_210.SLDPRT,1,tail rod T-TailEnd,210 (180-220 adj),carbon/aluminum/PLA rod,standard rod/print,kangaroo-inspired pitch counterbalance
+TailMass.SLDPRT,1,tail counterweight,r16 x 30,steel nuts,standard part,0-30 g adjustable at tail end
+ElasticTendon_52.SLDPRT,1,elastic tendon,52 working,rubber band/extension spring,purchase,energy-storage element drum->A
+Drum.SLDPRT,1,winding drum,r18 x 24,PLA/aluminum,3D print/CNC,motor winds tendon to preload
+Motor.SLDPRT,1,DC gear motor (envelope),70x36x36,standard part,purchase,slow preload, not direct jump drive
+Servo.SLDPRT,1,release servo (envelope),42x26x38,standard part,purchase,MG90S/20g, flips the latch
+Latch.SLDPRT,1,latch/pawl (envelope),44x12x16,PLA/aluminum,3D print/CNC,holds crouched stored-energy state
+M3_Axle_60.SLDPRT,7,pivot axle,d3 x 60,steel M3,purchase,ties L+R chain at H0/H1/H2/A/B/F/T
+Standoff_44.SLDPRT,4,plate standoff,d12 x 44,brass/PLA,purchase/print,sets 48mm plate gap, stiffens frame

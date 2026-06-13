@@ -19,20 +19,39 @@ The design uses a motor-preloaded elastic jumping architecture:
 - Mechanism animation GIF/WebP
 - Engineering render images, DXF files, BOM, dimensions, and validation plan
 
-## Key Files
+## Final Deliverables (latest)
+
+- **`袋鼠仿生弹跳机器人_设计任务书与说明书.md`** — course design task & specification document (12 sections, Chinese). Primary submission.
+- **`solidworks_basic_model/kangaroo_overleap_bioinspired_v1/`** — final trustworthy 3D SolidWorks assembly:
+  - `Kangaroo_Overleap_BioInspired_Assembly.SLDASM` — main assembly (16 native parts, 31 instances)
+  - `parts/` — 16 native `.SLDPRT` files
+  - `model_readme.md` — how the model was built and how to verify it
+  - `parts_list.csv` — model parts list
+  - `final_render.png` / `verify_multiview.png` — render + 4-view verification
+  - `assembly_export.STL` — merged whole-assembly STL
+  - `solve_mechanism.py` + `mechanism_pose.json` — geometry solver (all link-length constraints met to machine precision)
+
+The new assembly is **geometry-solved first, then modeled**: every joint physically connects (shared M3 axles), the chain is a real closed loop, and the export bounding box is X≈417 × Y≈231 × Z≈52 mm — the 52 mm depth confirms it is a true 3D body, not a flat plate.
+
+## Other Files
 
 - `袋鼠仿生弹跳机器人_完整重设计报告.md` - full Chinese design report
 - `README_交付说明.md` - Chinese delivery guide
-- `solidworks_basic_model/KangarooRobot_completed_engineering_layout.SLDASM` - completed SolidWorks layout assembly
-- `solidworks_basic_model/native_parts/` - SolidWorks native part files
-- `solidworks_basic_model/final_completed_engineering_render_en.png` - final engineering render
-- `solidworks_basic_model/mechanism_motion_animation.gif` - mechanism animation
+- `solidworks_basic_model/mechanism_motion_animation.gif` - mechanism principle animation
 - `solidworks_basic_model/mechanism_animation_keyframes_clean.png` - key-frame sheet
 - `manufacturing_package/` - buildability-improved DXF files and fabrication checklist
+- `external_references/overleap/` - Overleap open-source jumping leg (MIT), used as a CAD/assembly reference
 - `MODEL_OPERABILITY_AUDIT.md` - CAD/model operability audit and improvement notes
-- `verified_body_and_links_import_to_inventor.dxf` - verified CAD layout DXF
 - `BOM_redesigned_kangaroo_robot.csv` - bill of materials
 - `verified_design_dimensions.csv` - verified design dimensions
+
+## Historical Models (superseded, kept for reference only)
+
+The earlier flat-looking assemblies are **not** the final deliverable. They had links that did not satisfy the closed-chain length constraints, a foot placed above the body, and no shared pivot axles, so parts appeared to float:
+
+- `solidworks_basic_model/KangarooRobot_completed_engineering_layout.SLDASM`
+- `solidworks_basic_model/KangarooRobot_TRUE_3D_assembly.SLDASM`
+- `solidworks_basic_model/KangarooRobot_TRUE_3D_FIXED_assembly.SLDASM`
 
 ## Core Dimensions
 
