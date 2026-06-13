@@ -28,6 +28,8 @@ The design uses a motor-preloaded elastic jumping architecture:
 - `solidworks_basic_model/final_completed_engineering_render_en.png` - final engineering render
 - `solidworks_basic_model/mechanism_motion_animation.gif` - mechanism animation
 - `solidworks_basic_model/mechanism_animation_keyframes_clean.png` - key-frame sheet
+- `manufacturing_package/` - buildability-improved DXF files and fabrication checklist
+- `MODEL_OPERABILITY_AUDIT.md` - CAD/model operability audit and improvement notes
 - `verified_body_and_links_import_to_inventor.dxf` - verified CAD layout DXF
 - `BOM_redesigned_kangaroo_robot.csv` - bill of materials
 - `verified_design_dimensions.csv` - verified design dimensions
@@ -69,4 +71,6 @@ This proves that the proposed single-side hind-leg mechanism is a determinate 1-
 ## Notes
 
 The SolidWorks model is a completed engineering layout model. Before fabrication, refine the parts with final motor mounting holes, servo mounting holes, bearing seats, fillets, lightening holes, and detailed latch geometry.
+
+For fabrication-oriented files, use the new `manufacturing_package/` folder. It adds manufacturing DXFs with lightening holes, M3 pivot references, bearing reference circles, tendon anchor holes, motor/servo mounting references, and an assembly checklist.
 

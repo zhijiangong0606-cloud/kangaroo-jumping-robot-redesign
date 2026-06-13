@@ -1,0 +1,10 @@
+﻿Item,Check,Target
+Pivot holes,M3 clearance,3.2-3.4 mm drill
+Bearing option,micro bearing seat,outer diameter to match purchased bearing
+Side plate spacing,left-right gap,16-24 mm total with spacers
+Link clearance,avoid plate rubbing,>= 0.5 mm each side
+Elastic tendon,anchor hooks,no rubbing through full stroke
+Latch,release direction,servo horn must clear latch in <45 deg
+Tail,mass adjustability,0/15/30 g test points
+Foot,contact material,rubber pad bonded or screwed
+Motor,winding direction,limit switch before over-stretch
