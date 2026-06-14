@@ -4,9 +4,20 @@ This audit records the current state of the CAD model and the changes made to im
 
 ## Current SolidWorks Model Status
 
+> **v7 update (physics-driven fixes):** a mechanics feasibility audit
+> (`feasibility_audit.py`) found the old linkage gave the foot almost **no vertical
+> push stroke** (2.2 mm of vertical vs 92 mm of horizontal scrub) — it could not
+> have jumped regardless of spring energy. The mechanism was re-optimized
+> (`optimize_mechanism.py`, topology unchanged) to **34.6 mm vertical foot travel**
+> with a **60° minimum transmission angle** and zero interference over the working
+> stroke. The latch was given a **14° self-locking tooth** so an MG90S servo can
+> release it (~1 kg·cm vs the 3.7 kg·cm the old square tooth needed), the side
+> plates were lightened (~27%), and a battery counter-mass + foot pads were added.
+> Full assembly: 42 components, 29 concentric mates, solid STL.
+
 Main assembly:
 
-- `solidworks_basic_model/KangarooRobot_completed_engineering_layout.SLDASM`
+- `solidworks_basic_model/kangaroo_overleap_bioinspired_v1/Kangaroo_Overleap_BioInspired_Assembly.SLDASM`
 
 The assembly is suitable for:
 
@@ -15,13 +26,14 @@ The assembly is suitable for:
 - demonstrating the relation between motor preload, latch release, elastic tendon, tail stabilizer, and closed-chain hind leg
 - visual presentation and course reporting
 
-The assembly is not yet a final production drawing because:
+Status after v6 functional-part pass:
 
-- link parts are simplified capsule links
-- bearing seats are not fully parameterized
-- latch geometry is still a placeholder
-- motor and servo mounting patterns are generic placeholders
-- no full SolidWorks mate set has been added for dynamic simulation
+- link parts now carry real hole pitches, lightening cuts, and bearing reference circles
+- latch/pawl is now a functional solid with a defined catch face, not a block placeholder
+- drum, foot, and standoff parts are modeled as buildable solids
+- motor and servo remain envelope references pending final purchased-part dimensions
+- geometry checked programmatically: parts mesh correctly, 27 concentric mates verified, set is printable
+- a full SolidWorks dynamic mate set for motion simulation is still outstanding
 
 ## Practical Issues Found
 
@@ -29,7 +41,7 @@ The assembly is not yet a final production drawing because:
 |---|---|---|
 | Simplified link geometry | Buildable, but not optimized for weight or bearings | Added manufacturing DXF with lightening holes and bearing reference circles |
 | Placeholder motor and servo | Actual purchased parts may not match | Added adjustable mounting reference holes and noted final resizing requirement |
-| Placeholder latch | Cannot be fabricated directly | Keep latch as functional location reference; redesign after choosing servo horn and latch material |
+| Placeholder latch | Cannot be fabricated directly | RESOLVED v6: latch/pawl modeled as functional solid with defined catch face; final tuning after servo horn selected |
 | No detailed washers/spacers in early model | Links may rub during physical assembly | Added spacer part and manufacturing checklist |
 | Elastic tendon path is conceptual | May rub or over-stretch | Added tendon anchor holes and hook points in manufacturing DXF |
 | Tail module was only visual | Needs parameter test | Added tail mass placeholder and 0/15/30 g validation plan |

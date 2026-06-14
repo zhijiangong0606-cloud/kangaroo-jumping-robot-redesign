@@ -36,508 +36,412 @@
   "n_solvable_samples": 3601,
   "standoff_clashes": [
     {
+      "theta": 122,
+      "link": "L2",
+      "standoff": 2,
+      "gap_mm": -0.8
+    },
+    {
+      "theta": 123,
+      "link": "L1",
+      "standoff": 2,
+      "gap_mm": -0.59
+    },
+    {
+      "theta": 123,
+      "link": "L2",
+      "standoff": 2,
+      "gap_mm": -1.71
+    },
+    {
+      "theta": 124,
+      "link": "L1",
+      "standoff": 2,
+      "gap_mm": -1.46
+    },
+    {
+      "theta": 124,
+      "link": "L2",
+      "standoff": 2,
+      "gap_mm": -2.62
+    },
+    {
+      "theta": 125,
+      "link": "L1",
+      "standoff": 2,
+      "gap_mm": -2.34
+    },
+    {
+      "theta": 125,
+      "link": "L2",
+      "standoff": 2,
+      "gap_mm": -3.53
+    },
+    {
+      "theta": 126,
+      "link": "L1",
+      "standoff": 2,
+      "gap_mm": -3.23
+    },
+    {
+      "theta": 126,
+      "link": "L2",
+      "standoff": 2,
+      "gap_mm": -4.45
+    },
+    {
+      "theta": 127,
+      "link": "L1",
+      "standoff": 2,
+      "gap_mm": -4.12
+    },
+    {
       "theta": 127,
       "link": "L2",
       "standoff": 2,
-      "gap_mm": -0.51
+      "gap_mm": -5.37
     },
     {
       "theta": 128,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -0.14
+      "gap_mm": -5.01
     },
     {
       "theta": 128,
       "link": "L2",
       "standoff": 2,
-      "gap_mm": -1.05
+      "gap_mm": -6.28
     },
     {
       "theta": 129,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -0.84
+      "gap_mm": -5.9
     },
     {
       "theta": 129,
       "link": "L2",
       "standoff": 2,
-      "gap_mm": -1.58
+      "gap_mm": -7.2
     },
     {
       "theta": 130,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -1.53
+      "gap_mm": -6.8
     },
     {
       "theta": 130,
       "link": "L2",
       "standoff": 2,
-      "gap_mm": -2.12
+      "gap_mm": -8.12
     },
     {
       "theta": 131,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -2.22
+      "gap_mm": -7.7
     },
     {
       "theta": 131,
       "link": "L2",
       "standoff": 2,
-      "gap_mm": -2.65
+      "gap_mm": -9.04
     },
     {
       "theta": 132,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -2.91
+      "gap_mm": -8.61
     },
     {
       "theta": 132,
       "link": "L2",
       "standoff": 2,
-      "gap_mm": -3.18
+      "gap_mm": -9.96
     },
     {
       "theta": 133,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -3.59
+      "gap_mm": -9.51
     },
     {
       "theta": 133,
       "link": "L2",
       "standoff": 2,
-      "gap_mm": -3.71
+      "gap_mm": -10.88
     },
     {
       "theta": 134,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -4.27
+      "gap_mm": -10.42
     },
     {
       "theta": 134,
       "link": "L2",
       "standoff": 2,
-      "gap_mm": -4.24
+      "gap_mm": -11.8
     },
     {
       "theta": 135,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -4.94
+      "gap_mm": -11.33
     },
     {
       "theta": 135,
       "link": "L2",
       "standoff": 2,
-      "gap_mm": -4.76
+      "gap_mm": -12.72
     },
     {
       "theta": 136,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -5.61
+      "gap_mm": -12.24
     },
     {
       "theta": 136,
       "link": "L2",
       "standoff": 2,
-      "gap_mm": -5.28
+      "gap_mm": -13.64
     },
     {
       "theta": 137,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -6.26
+      "gap_mm": -13.16
     },
     {
       "theta": 137,
       "link": "L2",
       "standoff": 2,
-      "gap_mm": -5.8
+      "gap_mm": -14.56
     },
     {
       "theta": 138,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -6.91
+      "gap_mm": -14.07
     },
     {
       "theta": 138,
       "link": "L2",
       "standoff": 2,
-      "gap_mm": -6.32
+      "gap_mm": -14.52
     },
     {
       "theta": 139,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -7.54
+      "gap_mm": -14.98
     },
     {
       "theta": 139,
       "link": "L2",
       "standoff": 2,
-      "gap_mm": -6.83
+      "gap_mm": -13.6
     },
     {
       "theta": 140,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -8.16
+      "gap_mm": -15.9
     },
     {
       "theta": 140,
       "link": "L2",
       "standoff": 2,
-      "gap_mm": -7.34
+      "gap_mm": -12.68
     },
     {
       "theta": 141,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -8.75
+      "gap_mm": -15.19
     },
     {
       "theta": 141,
       "link": "L2",
       "standoff": 2,
-      "gap_mm": -7.85
+      "gap_mm": -11.76
     },
     {
       "theta": 142,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -9.32
+      "gap_mm": -14.27
     },
     {
       "theta": 142,
       "link": "L2",
       "standoff": 2,
-      "gap_mm": -8.35
+      "gap_mm": -10.84
     },
     {
       "theta": 143,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -9.85
+      "gap_mm": -13.36
     },
     {
       "theta": 143,
       "link": "L2",
       "standoff": 2,
-      "gap_mm": -8.85
+      "gap_mm": -9.93
     },
     {
       "theta": 144,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -10.34
+      "gap_mm": -12.45
     },
     {
       "theta": 144,
       "link": "L2",
       "standoff": 2,
-      "gap_mm": -9.34
+      "gap_mm": -9.02
     },
     {
       "theta": 145,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -10.77
+      "gap_mm": -11.53
     },
     {
       "theta": 145,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -9.77
-    },
-    {
-      "theta": 146,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -11.12
-    },
-    {
-      "theta": 146,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -10.12
-    },
-    {
-      "theta": 147,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -11.38
-    },
-    {
-      "theta": 147,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -10.38
-    },
-    {
-      "theta": 148,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -11.54
-    },
-    {
-      "theta": 148,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -10.54
-    },
-    {
-      "theta": 149,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -11.58
-    },
-    {
-      "theta": 149,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -10.58
-    },
-    {
-      "theta": 150,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -11.5
-    },
-    {
-      "theta": 150,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -10.5
-    },
-    {
-      "theta": 151,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -11.3
-    },
-    {
-      "theta": 151,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -10.3
-    },
-    {
-      "theta": 152,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -11.0
-    },
-    {
-      "theta": 152,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -10.0
-    },
-    {
-      "theta": 153,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -10.62
-    },
-    {
-      "theta": 153,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -9.62
-    },
-    {
-      "theta": 154,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -10.16
-    },
-    {
-      "theta": 154,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -9.16
-    },
-    {
-      "theta": 155,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -9.66
-    },
-    {
-      "theta": 155,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -8.66
-    },
-    {
-      "theta": 156,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -9.11
-    },
-    {
-      "theta": 156,
       "link": "L2",
       "standoff": 2,
       "gap_mm": -8.11
     },
     {
+      "theta": 146,
+      "link": "L1",
+      "standoff": 2,
+      "gap_mm": -10.62
+    },
+    {
+      "theta": 146,
+      "link": "L2",
+      "standoff": 2,
+      "gap_mm": -7.2
+    },
+    {
+      "theta": 147,
+      "link": "L1",
+      "standoff": 2,
+      "gap_mm": -9.72
+    },
+    {
+      "theta": 147,
+      "link": "L2",
+      "standoff": 2,
+      "gap_mm": -6.29
+    },
+    {
+      "theta": 148,
+      "link": "L1",
+      "standoff": 2,
+      "gap_mm": -8.81
+    },
+    {
+      "theta": 148,
+      "link": "L2",
+      "standoff": 2,
+      "gap_mm": -5.39
+    },
+    {
+      "theta": 149,
+      "link": "L1",
+      "standoff": 2,
+      "gap_mm": -7.9
+    },
+    {
+      "theta": 149,
+      "link": "L2",
+      "standoff": 2,
+      "gap_mm": -4.49
+    },
+    {
+      "theta": 150,
+      "link": "L1",
+      "standoff": 2,
+      "gap_mm": -7.0
+    },
+    {
+      "theta": 150,
+      "link": "L2",
+      "standoff": 2,
+      "gap_mm": -3.59
+    },
+    {
+      "theta": 151,
+      "link": "L1",
+      "standoff": 2,
+      "gap_mm": -6.1
+    },
+    {
+      "theta": 151,
+      "link": "L2",
+      "standoff": 2,
+      "gap_mm": -2.69
+    },
+    {
+      "theta": 152,
+      "link": "L1",
+      "standoff": 2,
+      "gap_mm": -5.21
+    },
+    {
+      "theta": 152,
+      "link": "L2",
+      "standoff": 2,
+      "gap_mm": -1.8
+    },
+    {
+      "theta": 153,
+      "link": "L1",
+      "standoff": 2,
+      "gap_mm": -4.31
+    },
+    {
+      "theta": 153,
+      "link": "L2",
+      "standoff": 2,
+      "gap_mm": -0.91
+    },
+    {
+      "theta": 154,
+      "link": "L1",
+      "standoff": 2,
+      "gap_mm": -3.42
+    },
+    {
+      "theta": 154,
+      "link": "L2",
+      "standoff": 2,
+      "gap_mm": -0.03
+    },
+    {
+      "theta": 155,
+      "link": "L1",
+      "standoff": 2,
+      "gap_mm": -2.54
+    },
+    {
+      "theta": 156,
+      "link": "L1",
+      "standoff": 2,
+      "gap_mm": -1.66
+    },
+    {
       "theta": 157,
       "link": "L1",
       "standoff": 2,
-      "gap_mm": -8.54
-    },
-    {
-      "theta": 157,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -7.54
-    },
-    {
-      "theta": 158,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -7.93
-    },
-    {
-      "theta": 158,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -6.93
-    },
-    {
-      "theta": 159,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -7.31
-    },
-    {
-      "theta": 159,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -6.31
-    },
-    {
-      "theta": 160,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -6.67
-    },
-    {
-      "theta": 160,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -5.67
-    },
-    {
-      "theta": 161,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -6.02
-    },
-    {
-      "theta": 161,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -5.02
-    },
-    {
-      "theta": 162,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -5.36
-    },
-    {
-      "theta": 162,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -4.36
-    },
-    {
-      "theta": 163,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -4.69
-    },
-    {
-      "theta": 163,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -3.69
-    },
-    {
-      "theta": 164,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -4.02
-    },
-    {
-      "theta": 164,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -3.02
-    },
-    {
-      "theta": 165,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -3.34
-    },
-    {
-      "theta": 165,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -2.34
-    },
-    {
-      "theta": 166,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -2.65
-    },
-    {
-      "theta": 166,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -1.65
-    },
-    {
-      "theta": 167,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -1.96
-    },
-    {
-      "theta": 167,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -0.96
-    },
-    {
-      "theta": 168,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -1.27
-    },
-    {
-      "theta": 168,
-      "link": "L2",
-      "standoff": 2,
-      "gap_mm": -0.27
-    },
-    {
-      "theta": 169,
-      "link": "L1",
-      "standoff": 2,
-      "gap_mm": -0.58
+      "gap_mm": -0.78
     }
   ]
 }

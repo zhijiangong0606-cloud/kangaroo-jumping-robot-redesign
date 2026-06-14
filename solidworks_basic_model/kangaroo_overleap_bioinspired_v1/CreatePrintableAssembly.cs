@@ -26,14 +26,26 @@ class CreatePrintableAssembly
 
     struct P { public double X, Y; public P(double x, double y) { X = x; Y = y; } }
 
-    // Solved crouch stance (theta = -74 deg). Foot under-and-ahead, knees bent.
-    static readonly P H0 = new P(0, 0), H1 = new P(-80, 60), H2 = new P(120, 60);
-    static readonly P A  = new P(-68.97, 21.55);
-    static readonly P B  = new P(-35.20, -93.60);
-    static readonly P F  = new P(102.45, -119.14);
-    static readonly P Foot = new P(181.11, -133.74);
+    // v7 OPTIMIZED geometry (foot gets a real ~35 mm vertical extension stroke).
+    // Assembled at the CROUCH / stored-energy pose (theta = -180 deg).
+    static readonly P H0 = new P(0, 0), H1 = new P(-94.8, 64.4), H2 = new P(134.3, 38.0);
+    static readonly P A  = new P(-153.798, 64.376);
+    static readonly P B  = new P(-85.791, -20.646);
+    static readonly P F  = new P(6.717, -59.504);
+    static readonly P Foot = new P(80.475, -90.485);
     static readonly P T  = new P(-95, 2);
     static readonly P TailEnd = new P(-273.1, -109.3);
+    // v11 dual-mode tail: the rod pivots about T. TS is the body-fixed stop pin that
+    // rides the rod's curved limit slot (28 mm from T). The slot ends set two limits:
+    //   DOWN (tail tip on the ground line)  -> rod axis angle TAIL_DOWN_DEG
+    //   UP   (tail tip lifted, airborne)    -> rod axis angle TAIL_UP_DEG
+    // Mid-swing (TAIL_MID_DEG) is the saved/static pose. Angles are the rod's +X axis
+    // direction measured in world degrees (atan2). The 210 mm rod + Ø44 mass are unchanged.
+    static readonly P TS = new P(-122.735, -1.84);  // body stop pin, |TS-T| = 28 mm
+    const double TAIL_DOWN_DEG = -153.87;  // tip -> ground (Y=-90.5): pentapedal support
+    const double TAIL_UP_DEG   = -190.37;  // tip lifted (Y=+40):     hopping counterbalance
+    const double TAIL_MID_DEG  = -172.12;  // mid-swing: static saved pose
+    const double TAIL_LEN      = 210.0;
 
     // --- Z layers (mid-plane of each part, mm) ---
     const double PLATE_Z = 34;     // side plates at +-34 (4 mm thick)
@@ -63,11 +75,10 @@ class CreatePrintableAssembly
         Place("BodyPlate_Side.SLDPRT",  0, 0,  PLATE_Z, 0);
         Place("BodyPlate_Side.SLDPRT",  0, 0, -PLATE_Z, 0);
         // 4 corner standoffs span the gap (centered on z=0, length 64).
-        // Top-left corner moved out to (-130,95): an interference sweep showed the
-        // original (-118,83) was hit by L1/L2 at theta 127-160 deg; (-130,95) clears
-        // the full crank rotation with >=5 mm margin.
+        // v7 corners pushed out to clear the larger link sweep; must match the
+        // BodyPlate standoff holes in CreatePrintableParts.cs.
         double[][] corners = {
-            new[]{-118.0,-28.0}, new[]{138.0,-28.0}, new[]{-130.0,95.0}, new[]{138.0,95.0}
+            new[]{-135.0,-28.0}, new[]{152.0,-28.0}, new[]{-135.0,98.0}, new[]{152.0,98.0}
         };
         foreach (var c in corners) Place("Standoff_64.SLDPRT", c[0], c[1], 0, 0, true);
 
@@ -82,23 +93,122 @@ class CreatePrintableAssembly
             LinkZ("Foot_80.SLDPRT",       F,  Foot, side * Z_FOOT);
         }
 
-        // ---- Tail (center plane) + tail mass ----
-        LinkZ("TailRod_210.SLDPRT", T, TailEnd, Z_TAIL);
-        Place("TailMass.SLDPRT", TailEnd.X, TailEnd.Y, 0, 0);
+        // ---- Standard machine elements at the pivots (v8) ----
+        // Fixed pivots H0/H1/H2: a 623 ball bearing (Ø10x4) seats in the rotating link
+        // hub; its bore rides the fixed pin -> link turns on rolling elements, not on
+        // plastic. The single rotating link Z-layer at each fixed pivot:
+        //   H0->L3(Z_L3)   H1->L1(Z_L1)   H2->L5(Z_L5)
+        P[] fbP = { H0, H1, H2 };
+        double[] fbZ = { Z_L3, Z_L1, Z_L5 };
+        for (int i = 0; i < fbP.Length; i++)
+            foreach (int side in new[]{ +1, -1 })
+                Place("Bearing_623.SLDPRT", fbP[i].X, fbP[i].Y, side * fbZ[i], 0, true);
 
-        // ---- Drive / energy modules mounted on the cage ----
-        Place("Motor.SLDPRT", 30, 95, 0, 0);     // motor across the top deck
-        Place("Servo.SLDPRT", 110, 92, 0, 0);    // release servo near crank
-        Place("Drum.SLDPRT", -70, 60, 0, 0, true);   // winding drum coaxial w/ H1 region
-        Place("Latch.SLDPRT", -55, 82, 0, 0);
-        LinkZ("ElasticTendon_52.SLDPRT", new P(-70, 60), A, Z_TENDON);  // drum -> crank A
+        // Moving pivots A/B/F: a sleeve bushing (Ø6, bore3.2) presses into every link
+        // hub there; the shared grooved pin runs through all the bushings.
+        P[] mbP = { A, B, F };
+        double[][] mbZ = { new[]{ Z_L1, Z_L2 }, new[]{ Z_L2, Z_L3, Z_L4 }, new[]{ Z_L4, Z_L5, Z_FOOT } };
+        for (int i = 0; i < mbP.Length; i++)
+            foreach (int side in new[]{ +1, -1 })
+                foreach (double zl in mbZ[i])
+                    Place("Bushing_0604.SLDPRT", mbP[i].X, mbP[i].Y, side * zl, 0, true);
 
-        // ---- Synchronizing pins through both plates + both legs ----
-        // Full-width (80 mm) pin, axis along Z, centered on z=0 at each shared pivot.
-        foreach (var p in new[] { H0, H1, H2, A, B, F })
-            PinZ("M3_Axle_80.SLDPRT", p.X, p.Y);
-        // Tail pin (single, 40 mm) at T.
-        PinZ("M3_Axle_40.SLDPRT", T.X, T.Y);
+        // ---- Dual-mode tail (hinged at root T, swings between two slot limits) ----
+        // The rod pivots about T on a full-width axle, so it is a true revolute joint.
+        // A body-fixed stop pin at TS rides the rod's curved limit slot; the slot ends
+        // are the DOWN limit (tip on the ground -> 5th-leg support) and UP limit (tip
+        // lifted -> airborne counterbalance). Saved at the mid-swing pose. The Ø44 mass
+        // and its clamp pin stack on the rod tip exactly as before, now at the swung tip.
+        double tmid = TAIL_MID_DEG * Math.PI / 180.0;
+        P tipMid = new P(T.X + TAIL_LEN * Math.Cos(tmid), T.Y + TAIL_LEN * Math.Sin(tmid));
+        Place("TailRod_210.SLDPRT", T.X, T.Y, Z_TAIL, tmid);          // root at T, swung to mid
+        Place("TailMass.SLDPRT", tipMid.X, tipMid.Y, 10, 0);          // disk on +Z face of rod tip
+        Place("M3_Axle_40.SLDPRT", tipMid.X, tipMid.Y, 8, 0, true);   // pin: rod tip hole + disk bore
+
+        // ---- Drive / energy module = EXTERNAL WINCH on the RIGHT plate outer face ----
+        // The 70 mm motor barrel will not fit inside the 64 mm cage and would foul the
+        // leg links, so the whole module mounts OUTBOARD of the +Z plate (outer face
+        // z=36). Motor barrel 37..107, its Ø6 shaft 107..127, the winding drum keys on
+        // that shaft at z=121, the release pawl pivots and the servo sit in the drum
+        // plane so the pawl lip drops on the drum rim tooth. The elastic tendon runs
+        // from the drum through a guide hole in the plate to crank A inside the cage.
+        const double MX = -70, MY = 92;     // motor / drum / winch axis (X,Y)
+        const double Z_MOTOR = 72;          // barrel center -> 37..107 (clears plate)
+        const double Z_DRUM  = 121;         // drum center on the shaft (107..127)
+        Place("Motor.SLDPRT",  MX, MY, Z_MOTOR, 0, true);     // barrel + shaft along +Z
+        Place("MotorClamp.SLDPRT", MX, MY - 6, Z_MOTOR, 0);   // saddle around the barrel
+        Place("Drum.SLDPRT",   MX, MY, Z_DRUM, 0, true);      // keyed on shaft, tooth @+X
+        // GB/T 1096 flat key in the drum/shaft keyway (both keyways at +Y). Key cross-
+        // section 2x2 centred at the shaft surface (r3): centre at y = 3, spanning the
+        // shaft slot floor (y2) to the bore keyway floor (y4); length 8 along Z.
+        Place("Key_2x2x8.SLDPRT", MX, MY + 3.0, Z_DRUM, 0, true);
+        Place("Latch.SLDPRT",  MX + 35, MY + 26, Z_DRUM, 0);  // lip reaches drum rim tooth
+        Place("Servo.SLDPRT",  MX + 47, MY - 8, Z_DRUM, 0);   // output hub at the pawl tail
+        LinkZ("ElasticTendon_52.SLDPRT", new P(MX, MY + 14), A, Z_DRUM); // drum anchor -> A
+
+        // ---- Winch support bracket + posts: rigidly tie the outboard drive module
+        // back to the +Z side plate so the latch/servo/drum are NOT floating. Bracket
+        // sits just behind the drum plane (z=128); 3 standoff posts span to the plate;
+        // a pin fixes the latch pivot, two pins fix the servo flange to the bracket.
+        const double Z_BRK = 128;                          // bracket plane, behind drum
+        Place("WinchBracket.SLDPRT", 0, 0, Z_BRK, 0);
+        // latch pivot pin: bracket -> latch (-35,118)
+        Place("M3_Axle_40.SLDPRT", -35, 118, (Z_DRUM + Z_BRK)/2.0, 0, true);
+        // servo flange pins (-9 / -37, 104.5)
+        Place("M3_Axle_40.SLDPRT", -9,  104.5, (Z_DRUM + Z_BRK)/2.0, 0, true);
+        Place("M3_Axle_40.SLDPRT", -37, 104.5, (Z_DRUM + Z_BRK)/2.0, 0, true);
+        // 3 support posts bracket(z128) -> +Z plate(z34): length 94, centered z=81
+        foreach (var p in new[] { new[]{-88.0,74.0}, new[]{-2.0,74.0}, new[]{-45.0,108.0} })
+            Place("WinchPost_94.SLDPRT", p[0], p[1], (34 + Z_BRK)/2.0, 0, true);
+
+        // ---- Counter-mass: battery+controller pack bolted to the -Z plate OUTER face,
+        // opposite the outboard winch, to offset its lateral tipping moment. The pack
+        // body (22 thick) sits just outside the plate (plate at z -36..-32) so its inner
+        // face contacts the plate; two M3 bolts through the pack tab + plate hold it.
+        const double BZ = -47;              // pack center -> z -58..-36, inner face on plate
+        Place("BatteryPack.SLDPRT", MX, MY - 20, BZ, 0);
+        // 2 mounting bolts through the pack tab and the -Z plate (tab holes at +-28 in X)
+        Place("M3_Axle_40.SLDPRT", MX + 28, MY + 2, BZ + 6, 0, true);
+        Place("M3_Axle_40.SLDPRT", MX - 28, MY + 2, BZ + 6, 0, true);
+        // ---- Foot pads (rubber grip + landing buffer) on each foot tip ----
+        foreach (int side in new[] { +1, -1 })
+            Place("FootPad.SLDPRT", Foot.X, Foot.Y, side * Z_FOOT, 0, true);
+
+        // ---- Synchronizing axles through both plates + both legs (v8) ----
+        // FIXED pivots H0/H1/H2: M3 SHCS (GB/T 70.1) + GB/T 93 spring washer + GB/T 97
+        // plain washer under the nut (GB/T 6170), axially clamping the bearing-borne
+        // stack. The link still spins freely -- it turns on the 623 bearing, not the pin.
+        foreach (var p in new[] { H0, H1, H2 })
+        {
+            Place("M3_Bolt_80.SLDPRT", p.X, p.Y, -41.5, 0, true);  // head outside -Z plate
+            Place("Washer_M3.SLDPRT",       p.X, p.Y, 38.75, 0, true); // plain washer on +Z plate
+            Place("SpringWasher_M3.SLDPRT", p.X, p.Y, 39.4,  0, true); // spring washer
+            Place("M3_Nut.SLDPRT",          p.X, p.Y, 40.6,  0, true); // nut outside +Z plate
+        }
+        // MOVING pivots A/B/F: grooved pin + two GB/T 896 E-rings (one just outside each
+        // plate) -- the links rotate on their bushings; the circlips only retain the pin
+        // axially, so the joint is NOT clamped (would lock the linkage).
+        foreach (var p in new[] { A, B, F })
+        {
+            Place("M3_GroovedAxle_80.SLDPRT", p.X, p.Y, -40, 0, true); // base at -Z, grooves at ∓36
+            Place("Circlip_E3.SLDPRT", p.X, p.Y, -36, 0, true);
+            Place("Circlip_E3.SLDPRT", p.X, p.Y,  36, 0, true);
+        }
+        // Tail root axle (full width, through both plates + rod root) = revolute pivot.
+        PinZ("M3_Axle_80.SLDPRT", T.X, T.Y);
+        // Tail stop pin (full width, through both plates) rides the rod's limit slot.
+        PinZ("M3_Axle_80.SLDPRT", TS.X, TS.Y);
+
+        // ---- 4 corner standoff tie-bolts (GB/T 70.1 + GB/T 93 + GB/T 97 + GB/T 6170) ----
+        // The corner standoffs were previously unbolted (held only by being trapped). A
+        // long M3 now runs through each standoff bore and both plates, clamping the cage.
+        foreach (var c in corners)
+        {
+            Place("M3_Bolt_80.SLDPRT",      c[0], c[1], -41.5, 0, true);
+            Place("Washer_M3.SLDPRT",       c[0], c[1], 38.75, 0, true);
+            Place("SpringWasher_M3.SLDPRT", c[0], c[1], 39.4,  0, true);
+            Place("M3_Nut.SLDPRT",          c[0], c[1], 40.6,  0, true);
+        }
 
         model.ForceRebuild3(false);
         model.ViewZoomtofit2();
@@ -107,8 +217,14 @@ class CreatePrintableAssembly
         AddPinMates();
 
         model.ForceRebuild3(false);
-        int err = model.SaveAs3(Path.Combine(Root, "Kangaroo_Overleap_BioInspired_Assembly.SLDASM"), 0, 2);
-        log.Add("ASSEMBLY saveErr=" + err);
+        // A previous AnimateAssembly run may have left the OLD assembly file open in SW,
+        // which locks it and makes SaveAs silently fail (saveErr=1). Close any open copy
+        // of the target file (NOT our freshly-built in-memory doc) before saving.
+        string outPath = Path.Combine(Root, "Kangaroo_Overleap_BioInspired_Assembly.SLDASM");
+        try { swApp.CloseDoc("Kangaroo_Overleap_BioInspired_Assembly.SLDASM"); } catch {}
+        int saveErr = 0, saveWarn = 0;
+        bool saved = model.Extension.SaveAs(outPath, 0, 1, null, ref saveErr, ref saveWarn);
+        log.Add("ASSEMBLY saved=" + saved + " err=" + saveErr + " warn=" + saveWarn);
     }
 
     static void LinkZ(string file, P a, P b, double z)
@@ -138,23 +254,28 @@ class CreatePrintableAssembly
         {
             var mu = (MathUtility)swApp.GetMathUtility();
             double c = Math.Cos(rz), s = Math.Sin(rz);
-            double[] d = { c, -s, 0, s, c, 0, 0, 0, 1, x * MM, y * MM, z * MM, 1, 0, 0, 0 };
+            // SolidWorks Transform2 applies the 3x3 block as a ROW-vector (v*M), so the
+            // rotation block must be stored transposed to rotate by +rz. The earlier
+            // { c,-s, s,c } rotated by -rz, mirroring every link's far end in Y.
+            double[] d = { c, s, 0, -s, c, 0, 0, 0, 1, x * MM, y * MM, z * MM, 1, 0, 0, 0 };
             comp.Transform2 = (MathTransform)mu.CreateTransform(d);
             placed.Add(comp.Name2);
         }
         log.Add((comp == null ? "FAILED " : "added ") + file + (comp != null ? " ["+comp.Name2+"]" : ""));
     }
 
-    // Concentric mates between each full-width pin and every hole it passes through.
-    // Faces are coordinate-picked: a point on a cylinder wall = (cx+r, cy, z).
-    // The Z value disambiguates which link's hole at a shared pivot is selected.
-    const double HOLE_MOVE_R = 1.70;  // moving link hole radius
+    // Concentric mates pin-axis <-> link-hub-axis at every pivot. v8 hole radii:
+    //   fixed pivots H0/H1/H2 -> Ø10 bearing seat (r5.0)
+    //   moving pivots A/B/F    -> Ø6 bushing seat (r3.0)
+    // A concentric mate between any two coaxial cylinders fixes the axis, so picking the
+    // link-hub wall + the pin wall is sufficient (the bearing/bushing sit between them).
+    const double HOLE_MOVE_R = 3.0;   // moving link bushing-seat hole radius (Ø6)
+    const double HUB_FIXED_R = 5.0;   // fixed link bearing-seat hole radius (Ø10)
     const double HOLE_BODY_R = 1.60;  // plate hole radius
-    const double PIN_R       = 1.50;  // pin radius
+    const double PIN_R       = 1.50;  // pin / bolt shank radius
 
     static void AddPinMates()
     {
-        // joint -> list of link Z-layers (per side) that have a hole there.
         var moving = new Dictionary<P, double[]>();
         moving[H1] = new[]{ Z_L1 };
         moving[H2] = new[]{ Z_L5 };
@@ -169,12 +290,13 @@ class CreatePrintableAssembly
         for (int i = 0; i < pivots.Length; i++)
         {
             P p = pivots[i];
+            double holeR = isFixed[i] ? HUB_FIXED_R : HOLE_MOVE_R;
             foreach (int side in new[]{ +1, -1 })
                 foreach (double zl in moving[p])
                 {
                     bool added = Concentric(
                         p.X + PIN_R, p.Y, 0,                 // point on pin wall (z=0 inside cage)
-                        p.X + HOLE_MOVE_R, p.Y, side * zl);  // point on link hole wall
+                        p.X + holeR, p.Y, side * zl);        // point on link hub wall
                     if (added) ok++; else fail++;
                 }
             if (isFixed[i])
@@ -186,6 +308,9 @@ class CreatePrintableAssembly
                     if (added) ok++; else fail++;
                 }
         }
+        // Tail root revolute (tail-rod root hole <-> full-width root axle at T) is added
+        // by AddMatesLite, which already includes pivot T and matches Face2 objects by
+        // geometry. (The SelectByID2 path below cannot hit the buried cage walls.)
         log.Add("MATES concentric ok=" + ok + " failed=" + fail);
     }
 

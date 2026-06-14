@@ -12,8 +12,8 @@ Outputs a JSON report + prints the continuous valid theta range and any clashes.
 """
 import math, json
 
-H0 = (0.0, 0.0); H1 = (-80.0, 60.0); H2 = (120.0, 60.0)
-L1, L2, L3, L4, L5 = 40.0, 120.0, 100.0, 140.0, 180.0
+H0 = (0.0, 0.0); H1 = (-94.8, 64.4); H2 = (134.3, 38.0)
+L1, L2, L3, L4, L5 = 59.0, 108.9, 88.2, 100.3, 160.6
 FOOT_LEN = 80.0
 
 # link -> (mid-plane Z, thickness, height)  matching the CAD
@@ -24,7 +24,7 @@ LAYER = {
 PLATE_Z, PLATE_T = 34, 4
 # standoffs: full-width tubes (z -32..32), OD 8 -> radius 4, at 4 corners
 STANDOFF_R = 4.0
-STANDOFFS = [(-118.0, -28.0), (138.0, -28.0), (-118.0, 83.0), (138.0, 83.0)]
+STANDOFFS = [(-135.0, -28.0), (152.0, -28.0), (-135.0, 98.0), (152.0, 98.0)]
 
 
 def zrange(mid, t):

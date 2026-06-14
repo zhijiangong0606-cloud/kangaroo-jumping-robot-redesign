@@ -1,0 +1,32 @@
+================================================================
+(A) TRANSMISSION-ANGLE / DEAD-POINT CHECK
+================================================================
+  solvable crank range: theta in [-180.0, 180.0] deg
+  min transmission angle at B (L2-L3 dyad): 29.9 deg
+  min transmission angle at F (L4-L5 dyad): 85.1 deg
+  threshold for good transmission: >= 40 deg
+  VERDICT B-dyad: RISK - near dead point
+  VERDICT F-dyad: OK
+
+================================================================
+(B) ENERGY-BUDGET SELF-CONSISTENCY
+================================================================
+  preload 30 mm: E=0.405 J  F_spring=27.0 N  est height=4.1 cm
+  preload 40 mm: E=0.720 J  F_spring=36.0 N  est height=7.3 cm
+  preload 45 mm: E=0.911 J  F_spring=40.5 N  est height=9.3 cm
+
+  drum r=12 mm: winding torque needed = 0.486 N.m (= 5.0 kg.cm)
+  drum r=18 mm: winding torque needed = 0.729 N.m (= 7.4 kg.cm)
+  ref: 37D 6V gearmotor stall ~ 1.2-2.5 N.m (geared) -> ample for slow wind
+  NOTE: spring force 40 N at full preload is the real structural load
+
+================================================================
+(C) FOOT-FORCE TRANSMISSION (release pose)
+================================================================
+  at mid-stroke theta=0.0:
+    crank torque from tendon (max) = 1.620 N.m
+    foot vertical travel rate = 0.0022 m/rad
+    -> peak vertical foot force ~ 724.8 N
+    weight to lift m*g = 4.41 N
+    static force margin = 164.2x
+    (>1 needed to launch; high ratio = brief impulse, good)

@@ -1,16 +1,28 @@
-﻿part,qty,material,manufacturing,notes
-body_side_plate,2,PLA/Acrylic,3D print or laser cut,fixed pivots H0/H1/H2/T
-input_crank_H1_A,2,PLA/Aluminum,3D print/CNC,40 mm hole distance
+part,qty,material,manufacturing,notes
+body_side_plate,2,3-4mm PLA/Acrylic/carbon,3D print or laser cut,fixed pivots H0/H1/H2/T + 4 corner standoff holes + winch mount
+input_crank_H1_A,2,PLA/Aluminum,3D print/CNC,40 mm hole distance; 4 mm thick; pivot holes 3.4
 coupler_A_B,2,PLA/Aluminum,3D print/laser cut,120 mm hole distance
 thigh_rocker_H0_B,2,PLA/Acrylic,3D print/laser cut,100 mm hole distance
 shank_B_F,2,PLA/Acrylic,3D print/laser cut,140 mm hole distance
 rear_rocker_H2_F,2,PLA/Acrylic,3D print/laser cut,180 mm hole distance
+foot_pad,2,TPU/rubber,3D print/cast,Ø24x8 press-fit on foot tip; grip + landing damping
 tail_rod,1,PLA/carbon rod,3D print/standard rod,180-220 mm adjustable
 tail_mass,1,steel nuts,standard part,0-30 g adjustable
-DC_gear_motor,1,standard,purchase,6-12V gear motor
-release_servo,1,standard,purchase,9g/20g servo
-elastic_tendon,2,rubber/spring,purchase,extension spring or rubber band
-M3_fasteners,many,steel,purchase,hinge joints
-spacers,many,brass/PLA,purchase/print,8-12 mm spacers
+winding_drum,1,PLA/Aluminum,3D print/CNC,Ø36 bore Ø6.2 keys on motor shaft; rim catch tooth; tendon anchor
+motor_clamp,1,PLA,3D print,saddles Ø37 motor barrel; bolts to plate
+release_pawl_latch,1,PLA/Aluminum,3D print/CNC,14deg self-locking pawl (servo release <1.5kg.cm); servo kicks tail; lip catches drum tooth
+DC_gear_motor,1,standard,purchase,37D 6-12V gear motor with Ø6 shaft; external winch
+release_servo,1,standard,purchase,MG90S/20g servo flips the latch
+battery_controller_pack,1,Li-ion + PLA tray,purchase,2S Li-ion+ESP32+driver ~75g; mounts -Z to counter-balance the outboard winch
+elastic_tendon,2,rubber/spring,purchase,extension spring or rubber band; drum->crank A
+M3_bolt_80,6,steel,purchase,pivot axles H0/H1/H2/A/B/F (head + nut retained)
+M3_nut,6,steel,purchase,retains each pivot bolt
+M3_axle_40,1,steel,purchase,tail pivot at T
+washer,many,nylon/PLA/steel,purchase/print,OD7 ID3.4 between every moving layer to reduce rub
+standoff,4,brass/PLA,purchase/print,Ø8 x64 sets plate gap; stiffens frame
 controller,1,Arduino/ESP32,purchase,motor + servo control
-limit_switch,1,standard,purchase,preload detection
+motor_driver,1,TB6612FNG/BTS7960,purchase,drives the preload motor
+IMU,1,MPU6050,purchase,pitch sensing for tail balance
+limit_switch,1,standard,purchase,preload/full-wind detection
+buck_converter,1,LM2596,purchase,5V rail for servo + logic
+battery,1,2S Li-ion/LiPo,purchase,power source
