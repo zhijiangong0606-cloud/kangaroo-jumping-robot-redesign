@@ -3,6 +3,9 @@
 *.bak
 *.tmp
 
+# Regenerable render intermediates (7 MB each); keep the PNGs, not the BMPs
+*.bmp
+
 # Build outputs and local helper binaries
 *.exe
 *.dll

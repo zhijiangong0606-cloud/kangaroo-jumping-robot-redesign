@@ -3,8 +3,10 @@ using System.IO;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 
-// Stage 2: assemble the bio-inspired jumper from native parts at the
-// geometry-solved stance pose, then capture real isometric screenshots.
+// Stage 2 (v2): assemble chunky parts into a visibly-3D robot.
+// Solid torso in the middle (z=0, 60mm deep); the two hind legs straddle it
+// at z=+-42; long M3 axles run through the torso to tie both legs; modules
+// sit on the torso. Same solved stance pose as solve_mechanism.py.
 class CreateBioInspiredAssembly
 {
     const double MM = 0.001;
@@ -19,15 +21,20 @@ class CreateBioInspiredAssembly
 
     struct P { public double X, Y; public P(double x, double y) { X = x; Y = y; } }
 
-    // Solved stance pose (mm) from solve_mechanism.py
+    // Solved leg-like crouch stance (theta=-74 deg, branch B0F0); foot under-and-
+    // ahead of the body, knees bent, ready to extend. Verified vs link lengths.
     static readonly P H0 = new P(0, 0), H1 = new P(-80, 60), H2 = new P(120, 60);
-    static readonly P A = new P(-100.6015, 25.7133);
-    static readonly P B = new P(-53.3385, -84.5872);
-    static readonly P F = new P(83.0532, -116.1673);
-    static readonly P Foot = new P(160.9913, -134.2131);
-    static readonly P T = new P(-70, -5);
-    static readonly P TailEnd = new P(-251.8653, -110);
-    static readonly P DrumC = new P(-55, 50);
+    static readonly P A = new P(-68.97, 21.55);
+    static readonly P B = new P(-35.20, -93.60);
+    static readonly P F = new P(102.45, -119.14);
+    static readonly P Foot = new P(181.11, -133.74);
+    // Tail roots at the REAR-LOW of the torso and sweeps down-back (kangaroo-like).
+    static readonly P T = new P(-95, 2);
+    static readonly P TailEnd = new P(-273.1, -109.3);
+
+    const double LEGZ = 42.0;     // leg plane offset (torso half-depth 30 + clearance)
+    const double TORSO_TOP = 112; // torso top deck Y (BoxAt center 47 + half 65)
+    const double TORSO_HALF_Z = 30;
 
     [STAThread]
     static void Main()
@@ -43,12 +50,11 @@ class CreateBioInspiredAssembly
         model = (ModelDoc2)swApp.NewDocument(TemplateAsm, 0, 0, 0);
         asm = (AssemblyDoc)model;
 
-        // --- Frame: two side plates ---
-        Place("BodyPlate_3D.SLDPRT", 0, 0, 24, 0);
-        Place("BodyPlate_3D.SLDPRT", 0, 0, -24, 0);
+        // --- Solid torso (center) ---
+        Place("Torso_3D.SLDPRT", 0, 0, 0, 0);
 
-        // --- Hind-leg closed chain, mirrored on both sides (z = +-15) ---
-        foreach (double z in new[] { 15.0, -15.0 })
+        // --- Hind-leg closed chain, one set each side, straddling the torso ---
+        foreach (double z in new[] { LEGZ, -LEGZ })
         {
             Link("L1_Crank_40.SLDPRT", H1, A, z);
             Link("L2_Coupler_120.SLDPRT", A, B, z);
@@ -58,44 +64,28 @@ class CreateBioInspiredAssembly
             Link("Foot_80.SLDPRT", F, Foot, z);
         }
 
-        // --- Tail (single, centered) ---
+        // --- Tail beam (roots into rear-low torso) + ball mass at its tip ---
         Link("TailRod_210.SLDPRT", T, TailEnd, 0);
         Place("TailMass.SLDPRT", TailEnd.X, TailEnd.Y, 0, 0);
 
-        // --- Energy / drive modules (centered in the frame gap) ---
-        Place("Drum.SLDPRT", DrumC.X, DrumC.Y, 0, 0);
-        Link("ElasticTendon_52.SLDPRT", DrumC, A, 0);
-        Place("Motor.SLDPRT", -55, 82, 0, 0);
-        Place("Servo.SLDPRT", 120, 86, 0, 0);
-        Place("Latch.SLDPRT", -80, 74, 0, 0);
+        // --- Drive / energy modules SEATED on the torso deck (bottom embedded
+        //     2 mm into the top face so they physically connect, not float) ---
+        // Motor half-height 20 -> center at deck top (112) - 20 + 2 embed = 94 ... keep
+        // it sitting with its base on the deck: centerY = TORSO_TOP - halfHeight + embed.
+        Place("Motor.SLDPRT", -10, TORSO_TOP - 20 + 2, 0, 0);   // 74x40x40, halfY=20
+        Place("Servo.SLDPRT", 95, TORSO_TOP - 15 + 2, 0, 0);    // 46x30x42, halfY=15
+        Place("Drum.SLDPRT", -70, TORSO_TOP - 10, 0, 0);        // drum on deck near motor
+        Place("Latch.SLDPRT", -80, TORSO_TOP - 8 + 2, 0, 0);    // latch by crank pivot
+        // Elastic tendon: from drum down to the crank pivot A (drive coupling).
+        Link("ElasticTendon_52.SLDPRT", new P(-70, TORSO_TOP - 10), A, LEGZ);
 
-        // --- M3 axles through all pivots (tie left+right, span both plates) ---
-        foreach (var p in new[] { H0, H1, H2, A, B, F, T })
-            Place("M3_Axle_60.SLDPRT", p.X, p.Y, 0, 0);
-
-        // --- Standoffs tying the two side plates (frame-only corners) ---
-        foreach (var p in new[] { new P(-100, -18), new P(143, -18), new P(125, 98), new P(-85, 98) })
-            Place("Standoff_44.SLDPRT", p.X, p.Y, 0, 0);
+        // --- Long M3 axles through the torso tie both legs at every pivot ---
+        foreach (var p in new[] { H0, H1, H2, A, B, F })
+            Place("M3_Axle_120.SLDPRT", p.X, p.Y, 0, 0);
 
         model.ForceRebuild3(false);
         int err = model.SaveAs3(Path.Combine(Root, "Kangaroo_Overleap_BioInspired_Assembly.SLDASM"), 0, 2);
         Console.WriteLine("ASSEMBLY saveErr=" + err);
-
-        // --- Capture real screenshots from multiple views ---
-        Shot("*Isometric", "view_isometric.bmp");
-        Shot("*Trimetric", "view_trimetric.bmp");
-        Shot("*Right", "view_right.bmp");
-        Shot("*Front", "view_front.bmp");
-        Console.WriteLine("SHOTS DONE");
-    }
-
-    static void Shot(string view, string file)
-    {
-        model.ShowNamedView2(view, -1);
-        model.ViewZoomtofit2();
-        model.GraphicsRedraw2();
-        bool ok = model.SaveBMP(Path.Combine(Root, file), 1600, 1200);
-        Console.WriteLine(file + " ok=" + ok);
     }
 
     static void Link(string file, P a, P b, double z)

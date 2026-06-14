@@ -3,11 +3,15 @@ using System.IO;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 
-// Stage 1: build clean native 3D parts for the kangaroo bio-inspired jumper.
-// Convention: sketch on Front Plane (XY = side-mechanism plane),
-// extrude MIDPLANE along Z so every part is symmetric about z=0.
-// Link parts: local origin at pivot-1, body runs +X to pivot-2 (capsule).
-// Cylinder/box parts: local origin at the part center.
+// Stage 1 (v3): build chunky solid parts using ONLY clean rectangle profiles.
+// Root cause of the "flat / no thickness" problem: capsule sketches (overlapping
+// circles + tangent lines + arcs) never closed into a valid profile, so the
+// extrude produced NO SOLID BODY. CreateCenterRectangle is proven to extrude to a
+// real solid every time, so every elongated part now uses it.
+// Convention: sketch on Front Plane (XY = side plane), extrude MIDPLANE on Z so
+// every part is symmetric about z=0. Link parts: local origin at pivot-1, body
+// runs +X to pivot-2; rectangle is extended past each pivot by half-height so the
+// joints visually overlap.
 class CreateBioInspiredParts
 {
     const double MM = 0.001;
@@ -30,22 +34,26 @@ class CreateBioInspiredParts
         swApp = (SldWorks)Activator.CreateInstance(Type.GetTypeFromProgID("SldWorks.Application"));
         swApp.Visible = true;
 
-        BodyPlate();
-        Link("L1_Crank_40.SLDPRT", 40, 16, 8);
-        Link("L2_Coupler_120.SLDPRT", 120, 16, 8);
-        Link("L3_Thigh_100.SLDPRT", 100, 20, 8);
-        Link("L4_Shank_140.SLDPRT", 140, 20, 8);
-        Link("L5_Rocker_180.SLDPRT", 180, 20, 8);
-        Foot("Foot_80.SLDPRT", 80, 30, 26);
-        Link("TailRod_210.SLDPRT", 210, 14, 10);
-        Link("ElasticTendon_52.SLDPRT", 52, 7, 7);
-        Cyl("TailMass.SLDPRT", 16, 30);
-        Cyl("Drum.SLDPRT", 18, 24);
-        Cyl("M3_Axle_60.SLDPRT", 1.5, 60);
-        Cyl("Standoff_44.SLDPRT", 6, 44);
-        Box("Motor.SLDPRT", 70, 36, 36);
-        Box("Servo.SLDPRT", 42, 26, 38);
-        Box("Latch.SLDPRT", 44, 12, 16);
+        // Solid torso body (depth 60 mm), generously rounded.
+        BoxAt("Torso_3D.SLDPRT", 22, 47, 248, 130, 60, 10);   // centered on body span
+
+        // Beam links: (file, length pivot-to-pivot, height, thickness Z, fillet).
+        Beam("L1_Crank_40.SLDPRT", 40, 24, 16, 3);
+        Beam("L2_Coupler_120.SLDPRT", 120, 22, 16, 3);
+        Beam("L3_Thigh_100.SLDPRT", 100, 32, 20, 4);
+        Beam("L4_Shank_140.SLDPRT", 140, 30, 20, 4);
+        Beam("L5_Rocker_180.SLDPRT", 180, 28, 18, 4);
+        Beam("Foot_80.SLDPRT", 80, 34, 26, 5);
+        Beam("TailRod_210.SLDPRT", 210, 22, 18, 4);
+        Beam("ElasticTendon_52.SLDPRT", 52, 12, 12, 2);
+
+        // Round / box solids.
+        Cyl("TailMass.SLDPRT", 24, 44, 6);
+        Cyl("Drum.SLDPRT", 20, 30, 3);
+        Cyl("M3_Axle_120.SLDPRT", 2.0, 120, 0);   // sharp pin, no fillet
+        Box("Motor.SLDPRT", 74, 40, 40, 4);
+        Box("Servo.SLDPRT", 46, 30, 42, 3);
+        Box("Latch.SLDPRT", 50, 16, 22, 2);
 
         Console.WriteLine("PARTS DONE");
     }
@@ -63,100 +71,82 @@ class CreateBioInspiredParts
 
     static void MidExtrude(ModelDoc2 m, double depthMm)
     {
-        // MidPlane end condition (4): symmetric about the sketch plane.
         m.FeatureManager.FeatureExtrusion2(true, false, false,
             (int)swEndConditions_e.swEndCondMidPlane, 0,
             depthMm * MM, 0, false, false, false, false, 0, 0,
             false, false, false, false, true, true, true, 0, 0, false);
     }
 
-    static void Save(ModelDoc2 m, string file)
+    // Round over every edge of the solid body for a cleaner, more finished look.
+    static void FilletAll(ModelDoc2 m, double radiusMm)
+    {
+        var part = (PartDoc)m;
+        var bodies = (object[])part.GetBodies2((int)swBodyType_e.swSolidBody, false);
+        if (bodies == null || bodies.Length == 0) return;
+        var edges = (object[])((Body2)bodies[0]).GetEdges();
+        if (edges == null || edges.Length == 0) return;
+        m.ClearSelection2(true);
+        foreach (var e in edges) ((Entity)e).Select4(true, null);
+        m.FeatureManager.FeatureFillet2(
+            (int)swFeatureFilletOptions_e.swFeatureFilletUniformRadius,
+            radiusMm * MM, 0,
+            (int)swFeatureFilletType_e.swFeatureFilletType_Simple,
+            0, 0, null, null, null, null, null);
+        m.ClearSelection2(true);
+    }
+
+    static void Save(ModelDoc2 m, string file, double filletMm)
     {
         m.ForceRebuild3(false);
+        var b0 = (object[])((PartDoc)m).GetBodies2((int)swBodyType_e.swSolidBody, false);
+        if (b0 != null && b0.Length > 0 && filletMm > 0) FilletAll(m, filletMm);
+        m.ForceRebuild3(false);
+        // verify a solid body still exists after filleting
+        var bodies = (object[])((PartDoc)m).GetBodies2((int)swBodyType_e.swSolidBody, false);
+        int nb = bodies == null ? 0 : bodies.Length;
         int err = m.SaveAs3(Path.Combine(OutDir, file), 0, 2);
-        Console.WriteLine(file + " saveErr=" + err);
+        Console.WriteLine(file + " saveErr=" + err + " solidBodies=" + nb + " fillet=" + filletMm);
         swApp.CloseDoc(m.GetTitle());
     }
 
-    static void BodyPlate()
-    {
-        var m = NewPart("BodyPlate_3D");
-        // Hexagonal side frame covering all fixed pivots + module mounts.
-        double[,] pts = { { -115, -25 }, { 150, -25 }, { 150, 70 },
-                          { 135, 105 }, { -95, 105 }, { -115, 70 } };
-        m.SketchManager.InsertSketch(true);
-        int n = pts.GetLength(0);
-        for (int i = 0; i < n; i++)
-        {
-            int j = (i + 1) % n;
-            m.SketchManager.CreateLine(pts[i, 0] * MM, pts[i, 1] * MM, 0,
-                                       pts[j, 0] * MM, pts[j, 1] * MM, 0);
-        }
-        // Fixed pivots + module mount holes (3.5 mm).
-        double[,] holes = { { 0, 0 }, { -80, 60 }, { 120, 60 }, { -70, -5 },
-                            { -55, 50 }, { -55, 80 }, { 120, 88 }, { -80, 78 } };
-        for (int i = 0; i < holes.GetLength(0); i++)
-            m.SketchManager.CreateCircleByRadius(holes[i, 0] * MM, holes[i, 1] * MM, 0, 3.5 * MM);
-        m.SketchManager.InsertSketch(true);
-        MidExtrude(m, 4);
-        Save(m, "BodyPlate_3D.SLDPRT");
-    }
-
-    static void Link(string file, double len, double w, double th)
+    // Rectangle beam: origin at pivot-1, runs +X to pivot-2 (length L), height H,
+    // extended by H/2 past each end so joints overlap. Thickness T on Z.
+    static void Beam(string file, double L, double H, double T, double fillet)
     {
         var m = NewPart(file.Replace(".SLDPRT", ""));
-        double r = w / 2.0;
+        double x0 = -H / 2.0, x1 = L + H / 2.0;
+        double cx = (x0 + x1) / 2.0, halfx = (x1 - x0) / 2.0;
         m.SketchManager.InsertSketch(true);
-        m.SketchManager.CreateCircleByRadius(0, 0, 0, r * MM);
-        m.SketchManager.CreateCircleByRadius(len * MM, 0, 0, r * MM);
-        m.SketchManager.CreateLine(0, r * MM, 0, len * MM, r * MM, 0);
-        m.SketchManager.CreateLine(0, -r * MM, 0, len * MM, -r * MM, 0);
-        // pivot bores
-        m.SketchManager.CreateCircleByRadius(0, 0, 0, 1.6 * MM);
-        m.SketchManager.CreateCircleByRadius(len * MM, 0, 0, 1.6 * MM);
-        // lightening holes on long links
-        if (len > 80)
-        {
-            m.SketchManager.CreateCircleByRadius(len * 0.35 * MM, 0, 0, 4 * MM);
-            m.SketchManager.CreateCircleByRadius(len * 0.65 * MM, 0, 0, 4 * MM);
-        }
+        m.SketchManager.CreateCenterRectangle(cx * MM, 0, 0, (cx + halfx) * MM, (H / 2.0) * MM, 0);
         m.SketchManager.InsertSketch(true);
-        MidExtrude(m, th);
-        Save(m, file);
+        MidExtrude(m, T);
+        Save(m, file, fillet);
     }
 
-    static void Foot(string file, double len, double w, double th)
+    // Box centered at (cx,cy) with footprint lx x ly, depth lz on Z.
+    static void BoxAt(string file, double cx, double cy, double lx, double ly, double lz, double fillet)
     {
         var m = NewPart(file.Replace(".SLDPRT", ""));
-        double r = w / 2.0;
         m.SketchManager.InsertSketch(true);
-        m.SketchManager.CreateCircleByRadius(0, 0, 0, 8 * MM);          // ankle boss
-        m.SketchManager.CreateCircleByRadius(len * MM, 0, 0, r * MM);   // rounded toe pad
-        m.SketchManager.CreateLine(0, 8 * MM, 0, len * MM, r * MM, 0);
-        m.SketchManager.CreateLine(0, -8 * MM, 0, len * MM, -r * MM, 0);
-        m.SketchManager.CreateCircleByRadius(0, 0, 0, 1.6 * MM);
+        m.SketchManager.CreateCenterRectangle(cx * MM, cy * MM, 0,
+            (cx + lx / 2.0) * MM, (cy + ly / 2.0) * MM, 0);
         m.SketchManager.InsertSketch(true);
-        MidExtrude(m, th);
-        Save(m, file);
+        MidExtrude(m, lz);
+        Save(m, file, fillet);
     }
 
-    static void Cyl(string file, double rad, double depth)
+    static void Box(string file, double lx, double ly, double lz, double fillet)
+    {
+        BoxAt(file, 0, 0, lx, ly, lz, fillet);
+    }
+
+    static void Cyl(string file, double rad, double depth, double fillet)
     {
         var m = NewPart(file.Replace(".SLDPRT", ""));
         m.SketchManager.InsertSketch(true);
         m.SketchManager.CreateCircleByRadius(0, 0, 0, rad * MM);
         m.SketchManager.InsertSketch(true);
         MidExtrude(m, depth);
-        Save(m, file);
-    }
-
-    static void Box(string file, double lx, double ly, double lz)
-    {
-        var m = NewPart(file.Replace(".SLDPRT", ""));
-        m.SketchManager.InsertSketch(true);
-        m.SketchManager.CreateCenterRectangle(0, 0, 0, lx / 2 * MM, ly / 2 * MM, 0);
-        m.SketchManager.InsertSketch(true);
-        MidExtrude(m, lz);
-        Save(m, file);
+        Save(m, file, fillet);
     }
 }
